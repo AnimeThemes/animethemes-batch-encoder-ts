@@ -3,7 +3,7 @@ import { $ } from "bun";
 import { type MediaAnalysis, MediaAnalysisSchema, type MediaStream } from "./schema.ts";
 
 async function analyze(sourceFile: string): Promise<MediaAnalysis> {
-    const result = await $`ffprobe -v quiet -print_format json -show_streams ${sourceFile}`.json();
+    const result = await $`ffprobe -v quiet -print_format json -show_streams -show_format -show_chapters ${sourceFile}`.json();
 
     return v.parse(MediaAnalysisSchema, result);
 }

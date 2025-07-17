@@ -12,7 +12,7 @@ const ConfigSchema = v.strictObject({
     createPreview: v.optional(v.boolean(), false),
     includeUnfiltered: v.optional(v.boolean(), true),
     videoFilters: v.optional(v.record(v.string(), v.string()), {
-        filtered: "hqdn3d=0:0:3:3,gradfun,unsharp",
+        nuked: "hqdn3d=0:0:3:3,gradfun,unsharp",
         lightdenoise: "hqdn3d=0:0:3:3",
         heavydenoise: "hqdn3d=1.5:1.5:6:6",
         unsharp: "unsharp",
