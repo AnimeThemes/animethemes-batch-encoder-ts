@@ -31,7 +31,7 @@ const AudioStreamSchema = v.object({
 
 // The output file chapters must be empty to pass tests,
 // but we don't care about its attributes.
-const ChaptersSchema = v.array(v.any());
+const ChapterSchema = v.object({});
 
 const FormatSchema = v.object({
     format_name: v.string(),
@@ -41,7 +41,7 @@ const FormatSchema = v.object({
 const MediaStreamSchema = v.variant("codec_type", [VideoStreamSchema, AudioStreamSchema]);
 
 type MediaStream = v.InferOutput<typeof MediaStreamSchema>;
-type MediaChapters = v.InferOutput<typeof ChaptersSchema>;
+type MediaChapter = v.InferOutput<typeof ChapterSchema>;
 type MediaFormat = v.InferOutput<typeof FormatSchema>;
 
 const MediaAnalysisSchema = v.object({
@@ -50,10 +50,10 @@ const MediaAnalysisSchema = v.object({
         v.filterItems((item) => ["video", "audio"].includes(item.codec_type)),
         v.array(MediaStreamSchema),
     ),
-    chapters: ChaptersSchema,
+    chapters: v.array(ChapterSchema),
     format: FormatSchema,
 });
 
 type MediaAnalysis = v.InferOutput<typeof MediaAnalysisSchema>;
 
-export { type MediaAnalysis, type MediaStream, type MediaChapters, type MediaFormat, MediaAnalysisSchema };
+export { type MediaAnalysis, type MediaStream, type MediaChapter, type MediaFormat, MediaAnalysisSchema };
