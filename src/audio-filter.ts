@@ -1,4 +1,5 @@
-import { input, number } from "@inquirer/prompts";
+import { input } from "@inquirer/prompts";
+import { duration } from "@/util/prompt";
 
 interface AudioFilterConfig<T> {
     label: string;
@@ -26,23 +27,23 @@ const audioFilters = [
     createAudioFilter({
         label: "Fade In",
         prompt: async () => ({
-            exponential: await number({ message: "Exponential Time", required: true }),
+            duration: await duration({ message: "Duration", required: true }),
         }),
-        toString: (options) => `afade=d=${options.exponential}:curve=exp`,
+        toString: (options) => `afade=d=${options.duration}:curve=exp`,
     }),
     createAudioFilter({
         label: "Fade Out",
         prompt: async () => ({
-            startTime: await number({ message: "Start Time", required: true }),
-            exponential: await number({ message: "Exponential Time", required: true }),
+            startTime: await duration({ message: "Start Time", required: true }),
+            duration: await duration({ message: "Duration", required: true }),
         }),
-        toString: (options) => `afade=t=out:st=${options.startTime}:d=${options.exponential}`,
+        toString: (options) => `afade=t=out:st=${options.startTime}:d=${options.duration}:curve=exp`,
     }),
     createAudioFilter({
         label: "Mute",
         prompt: async () => ({
-            startTime: await number({ message: "Start Time", default: 0 }),
-            endTime: await number({ message: "End Time", required: true }),
+            startTime: await duration({ message: "Start Time", default: "0" }),
+            endTime: await duration({ message: "End Time", required: true }),
         }),
         toString: (options) => `volume=enable='between(t,${options.startTime},${options.endTime})':volume=0`,
     }),

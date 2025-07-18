@@ -1,10 +1,10 @@
 import fs from "node:fs/promises";
 import * as prompts from "@inquirer/prompts";
 import { analyze, streamToString } from "@/ffprobe/analyze";
-import { isValidDuration, parseDuration } from "@/ffmpeg/duration";
-import { Presets, SingleBar } from "cli-progress";
+import { parseDuration } from "@/ffmpeg/duration";
 import { loadEnvironment } from "@/env";
 import * as ffmpeg from "@/ffmpeg/builder";
+import * as customPrompts from "@/util/prompt";
 
 async function generate() {
     const { config, workDir } = await loadEnvironment();
@@ -49,17 +49,8 @@ async function generate() {
                 })),
         });
 
-        function promptDuration(message: string) {
-            return prompts.input({
-                message,
-                validate: (value) =>
-                    isValidDuration(value) ||
-                    "Please enter a valid duration. See FFmpeg documentation for accepted formats: https://ffmpeg.org/ffmpeg-utils.html#time-duration-syntax",
-            });
-        }
-
-        const from = await promptDuration("Enter start time");
-        const to = await promptDuration("Enter end time");
+        const from = await customPrompts.duration({ message: "Enter start time", required: true });
+        const to = await customPrompts.duration({ message: "Enter end time", required: true });
 
         const duration = parseDuration(to) - parseDuration(from);
 
