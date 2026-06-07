@@ -1,4 +1,4 @@
-import * as prompts from "@inquirer/prompts";
+import { input } from "@inquirer/prompts";
 
 const timeCodeFormat = /(?:(\d{1,2}):)?(\d{1,2}):(\d{1,2}(?:\.\d+)?)/;
 const valueFormat = /(\d+(?:\.\d+)?)(s|ms|us)?/;
@@ -40,7 +40,7 @@ function isValidDuration(duration: string): boolean {
 }
 
 function promptDuration(message: string, previous: string|null = null) {
-    return prompts.input({
+    return input({
         message,
         validate: (value) => {
             if (! isValidDuration(value)) {

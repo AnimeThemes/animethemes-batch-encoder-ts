@@ -1,7 +1,7 @@
-import { number } from "@inquirer/prompts";
+import { checkbox, input, number } from "@inquirer/prompts";
 import type { AudioStream } from "@/ffprobe/schema";
-import * as prompts from "@inquirer/prompts";
 import { getLoudnormInput } from "@/ffmpeg/loudnorm";
+import chalk from "chalk";
 
 interface AudioFilterConfig<T> {
     label: string;
@@ -18,6 +18,7 @@ function createAudioFilter<T>(config: AudioFilterConfig<T>): AudioFilter {
     return {
         label: config.label,
         promptToString: async () => {
+            console.log(chalk.green(`Select the values for the ${config.label} filter`));
             const options = await config.prompt();
 
             return config.toString(options);
@@ -29,25 +30,32 @@ const audioFilters = [
     createAudioFilter({
         label: "Fade In",
         prompt: async () => ({
-            duration: await number({
-                message: "Duration",
-                required: true,
-                step: 0.001,
-            }),
+            duration: await number({ message: "Duration", required: true, step: 0.001 }),
         }),
         toString: (options) => `afade=d=${options.duration}:curve=exp`,
     }),
     createAudioFilter({
         label: "Fade Out",
         prompt: async () => ({
-            startTime: await number({ message: "Start Time", required: true }),
-            duration: await number({
-                message: "Duration",
-                required: true,
-                step: 0.001,
-            }),
+            startTime: await number({ message: "Start Time", required: true, step: 0.001 }),
+            duration: await number({ message: "Duration", required: true, step: 0.001 }),
         }),
         toString: (options) => `afade=t=out:st=${options.startTime}:d=${options.duration}`,
+    }),
+    createAudioFilter({
+        label: "Mute",
+        prompt: async () => ({
+            startTime: await number({ message: "Start Time", required: true, step: 0.001 }),
+            endTime: await number({ message: "End Time", required: true, step: 0.001 }),
+        }),
+        toString: (options) => `volume=enable='between(t,${options.startTime},${options.endTime})':volume=0`,
+    }),
+    createAudioFilter({
+        label: "Custom",
+        prompt: async () => ({
+            text: await input({ message: "Filter", required: true }),
+        }),
+        toString: (options) => options.text,
     }),
 ] satisfies Array<AudioFilter>;
 
@@ -64,7 +72,7 @@ function getAudioResampling(audioStream: AudioStream): string {
 async function promptAudioFilters() {
     const appliedFilters: Record<string, string> = {};
 
-    const selectedFilters = await prompts.checkbox({
+    const selectedFilters = await checkbox({
         message: "Select audio filters",
         choices: audioFilters.map(filter => ({
             name: filter.label,

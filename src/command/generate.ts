@@ -1,5 +1,4 @@
 import fs, { writeFile } from "node:fs/promises";
-import * as prompts from "@inquirer/prompts";
 import { analyze, getAudioStream, getVideoStream } from "@/ffprobe/analyze";
 import { parseDuration, promptDuration } from "@/ffmpeg/duration";
 import { loadEnvironment } from "@/env";
@@ -11,6 +10,7 @@ import { promptVideoFilters } from "@/ffmpeg/videoFilter";
 import { output, seek } from "@/ffmpeg/seek";
 import { promptCustomQuestions } from "@/ffmpeg/customization";
 import chalk from "chalk";
+import { checkbox } from "@inquirer/prompts";
 
 type GenerateArgs = {
     file: string;
@@ -29,7 +29,7 @@ async function generate(args: GenerateArgs) {
         throw new Error("No source file candidates in current directory");
     }
 
-    const sourceFiles = await prompts.checkbox({
+    const sourceFiles = await checkbox({
         message: "Select source files",
         choices: sourceFileCandidates.map((file) => ({
             value: file,

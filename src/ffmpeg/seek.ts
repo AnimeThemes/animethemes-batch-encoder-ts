@@ -1,4 +1,4 @@
-import * as prompts from "@inquirer/prompts";
+import { input } from "@inquirer/prompts";
 
 function seekTime(ss?: string, to?: string): string {
     if (ss === undefined) {
@@ -19,8 +19,7 @@ function seek(ss: string, to: string, sourceFile: string): string {
 }
 
 function output(ss: string) {
-    return prompts
-        .input({
+    return input({
             message: "Enter output file name",
             validate: (value) => value.split(',').length === ss.split(',').length || "Please enter the same amount of text splitted by a comma",
         })

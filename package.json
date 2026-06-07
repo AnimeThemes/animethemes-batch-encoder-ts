@@ -7,6 +7,7 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "dev": "NODE_ENV=development bun run src/index.ts",
     "start": "bun run src/index.ts",
     "build:win": "bun build src/index.ts --compile --target=bun-windows-x64 --minify --outfile dist/batch-encoder.exe"
   },

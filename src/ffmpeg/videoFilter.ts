@@ -1,6 +1,5 @@
 import type { Config } from "@/config/schema";
-import { input } from "@inquirer/prompts";
-import * as prompts from "@inquirer/prompts";
+import { checkbox, input } from "@inquirer/prompts";
 
 type VideoFilter = {
     label: string;
@@ -86,7 +85,7 @@ const videoFilters = [
 ] satisfies Array<VideoFilter>;
 
 async function promptVideoFilters(config: Config): Promise<VideoFilter[]> {
-    const selectedFilters = await prompts.checkbox({
+    const selectedFilters = await checkbox({
         message: "Select video filters",
         choices: videoFilters.map(filter => ({
             name: filter.label,

@@ -1,8 +1,8 @@
 import * as v from "valibot";
-import * as prompts from "@inquirer/prompts";
 import { $ } from "bun";
 import { type AudioStream, type MediaAnalysis, MediaAnalysisSchema, type MediaStream, type VideoStream } from "./schema.ts";
 import chalk from "chalk";
+import { select } from "@inquirer/prompts";
 
 async function analyze(sourceFile: string): Promise<MediaAnalysis> {
     console.log(chalk.white(`Analyzing ${sourceFile}...`));
@@ -23,7 +23,7 @@ function streamToString(stream: MediaStream): string {
 
 async function getVideoStream(videoStreams: VideoStream[]): Promise<VideoStream | undefined> {
     return videoStreams.length > 1
-        ? await prompts.select({
+        ? await select({
             message: "Select video stream",
             choices: videoStreams
                 .map((stream) => ({
@@ -36,7 +36,7 @@ async function getVideoStream(videoStreams: VideoStream[]): Promise<VideoStream 
 
 async function getAudioStream(audioStreams: AudioStream[]): Promise<AudioStream | undefined> {
     return audioStreams.length > 1
-        ? await prompts.select({
+        ? await select({
             message: "Select audio stream",
             choices: audioStreams
                 .map((stream) => ({

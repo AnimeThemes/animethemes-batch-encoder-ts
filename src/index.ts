@@ -1,13 +1,11 @@
 import { Command } from "commander";
-import * as prompts from "@inquirer/prompts";
 import * as v from "valibot";
 import { generate } from "@/command/generate.ts";
 import { execute } from "@/command/execute";
 import { ensureInstalled, update, VERSION } from "@/system";
+import { select } from "@inquirer/prompts";
 
-const installedNow = await ensureInstalled();
-
-if (installedNow) {
+if (process.env.NODE_ENV !== "development" && await ensureInstalled()) {
     process.exit(0);
 }
 
@@ -65,7 +63,7 @@ function withErrorHandling(action: () => Promise<void>) {
 }
 
 async function selectMode() {
-    const runMode = await prompts.select({
+    const runMode = await select({
         message: "Select mode",
         choices: [
             {
