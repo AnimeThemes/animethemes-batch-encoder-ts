@@ -1,5 +1,6 @@
-import type { Config } from "@/config/schema";
 import { checkbox, input } from "@inquirer/prompts";
+
+import type { Config } from "@/config/schema";
 
 type VideoFilter = {
     label: string;

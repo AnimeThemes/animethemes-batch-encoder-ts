@@ -1,6 +1,6 @@
 {
   "name": "batch-encoder",
-  "version": "1.0",
+  "version": "1.1",
   "author": "AnimeThemes",
   "repo": "animethemes-batch-encoder-ts",
   "module": "src/index.ts",
@@ -8,6 +8,8 @@
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development bun run src/index.ts",
+    "eslint": "eslint .",
+    "lint": "eslint . --fix && prettier src",
     "start": "bun run src/index.ts",
     "build:win": "bun build src/index.ts --compile --target=bun-windows-x64 --minify --outfile dist/batch-encoder.exe"
   },
@@ -20,9 +22,14 @@
     "valibot": "^1.1.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/bun": "latest",
     "@types/cli-progress": "^3.11.6",
-    "prettier": "^3.6.2"
+    "eslint": "^10.4.1",
+    "eslint-plugin-simple-import-sort": "^13.0.0",
+    "globals": "^17.6.0",
+    "prettier": "^3.6.2",
+    "typescript-eslint": "^8.60.1"
   },
   "peerDependencies": {
     "typescript": "^5"

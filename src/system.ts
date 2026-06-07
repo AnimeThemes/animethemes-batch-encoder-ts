@@ -1,7 +1,8 @@
-import { copyFile, mkdir } from "node:fs/promises";
 import { spawn } from "node:child_process";
+import { copyFile, mkdir } from "node:fs/promises";
 import { homedir, tmpdir } from "node:os";
 import { join, normalize } from "node:path";
+
 import packageJson from "../package.json";
 
 function getPackageString(value: unknown, fallback: string) {

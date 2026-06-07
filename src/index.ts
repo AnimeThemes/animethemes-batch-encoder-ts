@@ -1,9 +1,10 @@
+import { select } from "@inquirer/prompts";
 import { Command } from "commander";
 import * as v from "valibot";
-import { generate } from "@/command/generate.ts";
+
 import { execute } from "@/command/execute";
+import { generate } from "@/command/generate.ts";
 import { ensureInstalled, update, VERSION } from "@/system";
-import { select } from "@inquirer/prompts";
 
 if (process.env.NODE_ENV !== "development" && await ensureInstalled()) {
     process.exit(0);

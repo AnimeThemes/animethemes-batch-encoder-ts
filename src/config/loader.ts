@@ -1,8 +1,9 @@
 import type { BunFile } from "bun";
-import { type Config, getDefaultConfig, parseConfig } from "./schema.ts";
 import * as os from "node:os";
 import * as path from "node:path";
 import * as v from "valibot";
+
+import { type Config, getDefaultConfig, parseConfig } from "./schema.ts";
 
 async function loadConfig(workDir: string, configfile: string): Promise<Config> {
     const [localConfig, globalConfig] = await Promise.all([

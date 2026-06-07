@@ -1,16 +1,17 @@
-import fs, { writeFile } from "node:fs/promises";
-import { analyze, getAudioStream, getVideoStream } from "@/ffprobe/analyze";
-import { parseDuration, promptDuration } from "@/ffmpeg/duration";
-import { loadEnvironment } from "@/env";
-import { getColorspaceArgs } from "@/ffmpeg/colorspace";
-import { getFirstPassString, getSecondPassString } from "@/ffmpeg/pass";
-import { getCbrBitrate, getCbrMaxBitrate } from "@/ffmpeg/bitrateMode";
-import { getAudioFiltersString, promptAudioFilters } from "@/ffmpeg/audioFilter";
-import { promptVideoFilters } from "@/ffmpeg/videoFilter";
-import { output, seek } from "@/ffmpeg/seek";
-import { promptCustomQuestions } from "@/ffmpeg/customization";
-import chalk from "chalk";
 import { checkbox } from "@inquirer/prompts";
+import chalk from "chalk";
+import fs, { writeFile } from "node:fs/promises";
+
+import { loadEnvironment } from "@/env";
+import { getAudioFiltersString, promptAudioFilters } from "@/ffmpeg/audioFilter";
+import { getCbrBitrate, getCbrMaxBitrate } from "@/ffmpeg/bitrateMode";
+import { getColorspaceArgs } from "@/ffmpeg/colorspace";
+import { promptCustomQuestions } from "@/ffmpeg/customization";
+import { parseDuration, promptDuration } from "@/ffmpeg/duration";
+import { getFirstPassString, getSecondPassString } from "@/ffmpeg/pass";
+import { output, seek } from "@/ffmpeg/seek";
+import { promptVideoFilters } from "@/ffmpeg/videoFilter";
+import { analyze, getAudioStream, getVideoStream } from "@/ffprobe/analyze";
 
 type GenerateArgs = {
     file: string;

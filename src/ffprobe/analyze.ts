@@ -1,8 +1,9 @@
-import * as v from "valibot";
-import { $ } from "bun";
-import { type AudioStream, type MediaAnalysis, MediaAnalysisSchema, type MediaStream, type VideoStream } from "./schema.ts";
-import chalk from "chalk";
 import { select } from "@inquirer/prompts";
+import { $ } from "bun";
+import chalk from "chalk";
+import * as v from "valibot";
+
+import { type AudioStream, type MediaAnalysis, MediaAnalysisSchema, type MediaStream, type VideoStream } from "./schema.ts";
 
 async function analyze(sourceFile: string): Promise<MediaAnalysis> {
     console.log(chalk.white(`Analyzing ${sourceFile}...`));

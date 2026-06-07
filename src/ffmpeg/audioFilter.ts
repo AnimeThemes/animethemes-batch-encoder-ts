@@ -1,7 +1,8 @@
 import { checkbox, input, number } from "@inquirer/prompts";
-import type { AudioStream } from "@/ffprobe/schema";
-import { getLoudnormInput } from "@/ffmpeg/loudnorm";
 import chalk from "chalk";
+
+import { getLoudnormInput } from "@/ffmpeg/loudnorm";
+import type { AudioStream } from "@/ffprobe/schema";
 
 interface AudioFilterConfig<T> {
     label: string;

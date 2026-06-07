@@ -1,5 +1,6 @@
-import { loadConfig } from "@/config/loader.ts";
 import { $ } from "bun";
+
+import { loadConfig } from "@/config/loader.ts";
 
 async function loadEnvironment(configfile: string) {
     await checkEncodingTools();

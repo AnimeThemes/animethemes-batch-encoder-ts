@@ -21,7 +21,7 @@ const ConfigSchema = v.strictObject({
 
 type Config = v.InferOutput<typeof ConfigSchema>;
 
-function parseConfig(config: any): Config {
+function parseConfig(config: Config): Config {
     return v.parse(ConfigSchema, config);
 }
 

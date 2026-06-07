@@ -1,7 +1,8 @@
-import type { AudioStream } from "@/ffprobe/schema";
-import { getAudioResampling } from "@/ffmpeg/audioFilter";
 import { $ } from "bun";
 import { parseArgsStringToArgv } from "string-argv";
+
+import { getAudioResampling } from "@/ffmpeg/audioFilter";
+import type { AudioStream } from "@/ffprobe/schema";
 
 type NormalizationInput = {
     input_i: string;

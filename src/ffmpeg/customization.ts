@@ -1,6 +1,7 @@
-import { bitRateModes } from "@/ffmpeg/bitrateMode";
-import type { Config } from "@/config/schema";
 import { checkbox, confirm, input } from "@inquirer/prompts";
+
+import type { Config } from "@/config/schema";
+import { bitRateModes } from "@/ffmpeg/bitrateMode";
 
 async function promptCustomQuestions(config: Config): Promise<Config> {
     const newConfig = {...config};

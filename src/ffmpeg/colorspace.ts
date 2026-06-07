@@ -47,7 +47,7 @@ function getColorspaceArgs(metaFile: MediaAnalysis): string {
     }
 
     // Method 2: Infer color date from source file resolution
-    const resolution = stream?.height!;
+    const resolution = stream?.height ?? 0;
 
     if (resolution >= 720) {
         return buildArgs(colorspaces.HD);

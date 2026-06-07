@@ -1,9 +1,9 @@
-import { getKeyframeIntervalArg } from "@/ffmpeg/keyframe";
-import { getAudioBitrateArgs, getBitrateModePass, type BitrateModes } from "@/ffmpeg/bitrateMode";
-import { getFileSizeLimitArg } from "@/ffmpeg/fileSizeLimit";
-import type { MediaAnalysis } from "@/ffprobe/schema";
-import type { VideoFilter } from "@/ffmpeg/videoFilter";
+import { type BitrateModes,getAudioBitrateArgs, getBitrateModePass } from "@/ffmpeg/bitrateMode";
 import { buildFilename } from "@/ffmpeg/filename";
+import { getFileSizeLimitArg } from "@/ffmpeg/fileSizeLimit";
+import { getKeyframeIntervalArg } from "@/ffmpeg/keyframe";
+import type { VideoFilter } from "@/ffmpeg/videoFilter";
+import type { MediaAnalysis } from "@/ffprobe/schema";
 
 function getFirstPassString(
     colorspaceArgs: string,

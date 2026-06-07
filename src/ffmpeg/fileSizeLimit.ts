@@ -1,8 +1,8 @@
-import type { MediaAnalysis } from "@/ffprobe/schema";
 import type { VideoFilter } from "@/ffmpeg/videoFilter";
+import type { MediaAnalysis } from "@/ffprobe/schema";
 
 async function getFileSizeLimitArg(meta: MediaAnalysis, duration: number, videoFilter: VideoFilter): Promise<string> {
-    let resolution: number = meta.streams.find(stream => stream.codec_type === "video")?.height!;
+    let resolution: number = meta.streams.find(stream => stream.codec_type === "video")?.height ?? 0;
 
     for (const videoFilterString of (await videoFilter.toString()).split(",")) {
         if (videoFilterString.includes('scale=-1:')) {
