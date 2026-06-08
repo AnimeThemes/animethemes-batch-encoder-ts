@@ -18,12 +18,12 @@ Ideally we are iterating over a combination of filters and settings, picking the
 
 1. Download the `.exe` file from the [latest release](https://github.com/AnimeThemes/animethemes-batch-encoder-ts/releases)
 2. Run the `.exe` file once. It'll install the `batch-encoder.exe` and add it to the Windows PATH as `batch-encoder`.
-3. Now you can use anywhere by running `batch-encoder` in the cmd.
+3. Now you can use anywhere by running `batch-encoder` in the CMD.
 
 ### Usage
 
 ```
-batch-encoder [generate | g] [execute | e] [--file [FILE]] [--config-file [FILE]]
+batch-encoder [generate | g] [execute | e] [update] [--file [FILE]] [--config-file [FILE]]
 ```
 
 #### Mode
@@ -32,6 +32,8 @@ batch-encoder [generate | g] [execute | e] [--file [FILE]] [--config-file [FILE]
 The user will be prompted for values that are not determined programmatically, such as inclusion/exclusion of a source file candidate, start time, end time, output file name and new audio filters.
 
 `execute` executes commands from file in the current directory line-by-line.
+
+`update` will search for the latest release in the GitHub repository and update the script. Restarting the CMD is required.
 
 #### File 
 

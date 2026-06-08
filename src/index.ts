@@ -75,6 +75,10 @@ async function selectMode() {
                 name: "Execute commands",
                 value: execute,
             },
+            {
+                name: "Update Batch Encoder",
+                value: update,
+            },
         ],
     });
 
