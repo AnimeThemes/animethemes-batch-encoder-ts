@@ -110,4 +110,4 @@ Building for Windows:
 
 ```
 bun run build:win
-``
+```
