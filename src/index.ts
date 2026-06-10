@@ -32,7 +32,7 @@ program
     .command("execute")
     .alias("e")
     .description("Execute commands")
-    .action((args) => withErrorHandling(() => execute({...args, ...program.opts()}))());
+    .action(() => withErrorHandling(() => execute())());
 
 program
     .command("update")

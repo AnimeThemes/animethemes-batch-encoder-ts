@@ -39,4 +39,6 @@ animethemes-webm-verifier
 *.mp4
 *.m2ts
 *.txt
+*.webm
+*.log
 commands.txt
