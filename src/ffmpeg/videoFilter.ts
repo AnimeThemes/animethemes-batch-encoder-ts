@@ -86,12 +86,14 @@ const videoFilters = [
 ] satisfies Array<VideoFilter>;
 
 async function promptVideoFilters(config: Config): Promise<VideoFilter[]> {
+    const filters = Object.keys(config.videoFilters);
+
     const selectedFilters = await checkbox({
         message: "Select video filters",
         choices: videoFilters.map(filter => ({
             name: filter.label,
             value: filter,
-            checked: Object.keys(config.videoFilters).includes(filter.filename)
+            checked: filters.includes(filter.filename)
         })),
         required: true,
         
