@@ -6,10 +6,6 @@ import { execute } from "@/command/execute";
 import { generate } from "@/command/generate.ts";
 import { ensureInstalled, update, VERSION } from "@/system";
 
-if (process.env.NODE_ENV !== "development" && await ensureInstalled()) {
-    process.exit(0);
-}
-
 const program = new Command();
 
 program
@@ -26,7 +22,7 @@ program
     .command("generate")
     .alias("g")
     .description("Generate commands and write to file")
-    .action((args) => withErrorHandling(() => generate({...args, ...program.opts()}))());
+    .action((args) => withErrorHandling(() => generate({ ...args, ...program.opts() }))());
 
 program
     .command("execute")
@@ -76,6 +72,12 @@ async function selectMode() {
             {
                 name: "Update Batch Encoder",
                 value: update,
+            },
+            {
+                name: "Install Batch Encoder",
+                value: async () => {
+                    await ensureInstalled();
+                },
             },
         ],
     });

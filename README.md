@@ -17,7 +17,7 @@ Ideally we are iterating over a combination of filters and settings, picking the
 ### Install
 
 1. Download the `.exe` file from the [latest release](https://github.com/AnimeThemes/animethemes-batch-encoder-ts/releases)
-2. Run the `.exe` file once. It'll install the `batch-encoder.exe` and add it to the Windows PATH as `batch-encoder`.
+2. Run the `.exe` file once and choose the "Install Batch Encoder" option. It'll install the `batch-encoder.exe` and add it to the Windows PATH as `batch-encoder`.
 3. Now you can use anywhere by running `batch-encoder` in the CMD.
 
 ### Usage
@@ -105,7 +105,7 @@ bun install
 Run the batch encoder:
 
 ```bash
-bun run dev
+bun start
 ```
 
 Building for Windows:
