@@ -1,16 +1,9 @@
 import { $ } from "bun";
 import { parseArgsStringToArgv } from "string-argv";
+import * as v from "valibot";
 
 import { getAudioResampling } from "@/ffmpeg/audioFilter";
-import type { AudioStream } from "@/ffprobe/schema";
-
-type NormalizationInput = {
-    input_i: string;
-    input_lra: string;
-    input_tp: string;
-    input_thresh: string;
-    target_offset: string;
-};
+import { NormalizationInputSchema, type AudioStream, type NormalizationInput } from "@/ffprobe/schema";
 
 const firstPassFilter = "loudnorm=I=-16:LRA=20:TP=-1:dual_mono=true:linear=true:print_format=json";
 
@@ -37,7 +30,7 @@ async function getLoudnormInput(
         throw new Error(`Could not find loudnorm JSON output\n${output}`);
     }
 
-    return JSON.parse(match[0]);
+    return v.parse(NormalizationInputSchema, JSON.parse(match[0]));
 }
 
 export { getLoudnormInput };

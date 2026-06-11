@@ -1,11 +1,5 @@
 import type { MediaAnalysis } from "@/ffprobe/schema";
 
-type Colorspace = {
-    colorspace: string;
-    primaries: string;
-    transfer: string;
-};
-
 const colorspaces = {
     HD: {
         colorspace: "bt709",
@@ -22,9 +16,9 @@ const colorspaces = {
         primaries: "bt470bg",
         transfer: "gamma28",
     },
-} as const;
+};
 
-function buildArgs(colorspace: Colorspace): string {
+function buildArgs(colorspace: (typeof colorspaces)[keyof typeof colorspaces]): string {
     return `-colorspace ${colorspace.colorspace} -color_primaries ${colorspace.primaries} -color_trc ${colorspace.transfer}`;
 }
 

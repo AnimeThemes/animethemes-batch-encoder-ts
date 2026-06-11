@@ -31,6 +31,11 @@ program
     .action(() => withErrorHandling(() => execute())());
 
 program
+    .command("install")
+    .description("Install the script globally")
+    .action(async () => await ensureInstalled());
+
+program
     .command("update")
     .description("Update the CLI to the latest version")
     .action(async () => await update());
@@ -63,21 +68,25 @@ async function selectMode() {
         choices: [
             {
                 name: "Generate commands",
+                description: "Generates commands from input files in the current directory. The user will be prompted for values that are not determined programmatically, such as inclusion/exclusion of a source file candidate, start time, end time, output file name and new audio filters.",
                 value: generate,
             },
             {
                 name: "Execute commands",
+                description: "Executes commands from file in the current directory in parallel.",
                 value: execute,
             },
             {
-                name: "Update Batch Encoder",
-                value: update,
-            },
-            {
                 name: "Install Batch Encoder",
+                description: "Install the script on the home directory and add batch-encoder as a Windows PATH.",
                 value: async () => {
                     await ensureInstalled();
                 },
+            },
+            {
+                name: "Update Batch Encoder",
+                description: "Searches for the latest release in the GitHub repository and update the script. Restarting the CMD is required.",
+                value: update,
             },
         ],
     });

@@ -39,7 +39,7 @@ function isValidDuration(duration: string): boolean {
         .every(value => value.match(timeCodeFormat) !== null || value.match(valueFormat) !== null)
 }
 
-function promptDuration(message: string, previous: string|null = null) {
+function promptDuration(message: string, previous: string|null = null): Promise<string> {
     return input({
         message,
         validate: (value) => {

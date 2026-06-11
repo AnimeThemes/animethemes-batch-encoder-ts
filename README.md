@@ -23,7 +23,7 @@ Ideally we are iterating over a combination of filters and settings, picking the
 ### Usage
 
 ```
-batch-encoder [generate | g] [execute | e] [update] [--file [FILE]] [--config-file [FILE]]
+batch-encoder [generate | g] [execute | e] [install] [update] [--file [FILE]] [--config-file [FILE]]
 ```
 
 #### Mode
@@ -31,7 +31,9 @@ batch-encoder [generate | g] [execute | e] [update] [--file [FILE]] [--config-fi
 `generate` generates commands from input files in the current directory.
 The user will be prompted for values that are not determined programmatically, such as inclusion/exclusion of a source file candidate, start time, end time, output file name and new audio filters.
 
-`execute` executes commands from file in the current directory line-by-line.
+`execute` executes commands from file in the current directory in parallel.
+
+`install` will put the script in your home directory and add `batch-encoder` to your Windows PATH.
 
 `update` will search for the latest release in the GitHub repository and update the script. Restarting the CMD is required.
 

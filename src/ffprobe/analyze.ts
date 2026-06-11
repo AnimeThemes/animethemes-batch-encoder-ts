@@ -3,7 +3,7 @@ import { $ } from "bun";
 import chalk from "chalk";
 import * as v from "valibot";
 
-import { type AudioStream, type MediaAnalysis, MediaAnalysisSchema, type MediaStream, type VideoStream } from "./schema.ts";
+import { type AudioStream, type MediaAnalysis, MediaAnalysisSchema, type MediaStream, type VideoStream } from "@/ffprobe/schema.ts";
 
 async function analyze(sourceFile: string): Promise<MediaAnalysis> {
     console.log(chalk.white(`Analyzing ${sourceFile}...`));

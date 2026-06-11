@@ -18,11 +18,11 @@ function seek(ss: string, to: string, sourceFile: string): string {
     return `${seekTime(ss, to)} -i "${sourceFile}"`;
 }
 
-function output(ss: string) {
+function output(ss: string): Promise<string> {
     return input({
-            message: "Enter output file name",
-            validate: (value) => value.split(',').length === ss.split(',').length || "Please enter the same amount of text splitted by a comma",
-        })
+        message: "Enter output file name",
+        validate: (value) => value.split(',').length === ss.split(',').length || "Please enter the same amount of text splitted by a comma",
+    });
 }
 
 export { seek, output };

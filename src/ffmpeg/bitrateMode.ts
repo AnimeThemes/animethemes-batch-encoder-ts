@@ -2,38 +2,25 @@ import type { MediaAnalysis, VideoStream } from "@/ffprobe/schema";
 
 // Bitrate Mode determines the rate control argument values for our commands
 // Further Reading: https://developers.google.com/media/vp9/bitrate-modes
-type BitrateModes = {
-    // Variable Bitrate Mode / Constant Quality Mode
-    VBR: {
-        firstPass: (crf: number) => string;
-        secondPass: (crf: number) => string;
-    };
-    // Constant Bitrate Mode
-    CBR: {
-        firstPass: (bitrate: number, maxBitrate: number) => string;
-        secondPass: (bitrate: number, maxBitrate: number) => string;
-    };
-    // Constrained Quality Mode
-    CQ: {
-        firstPass: (crf: number, bitrate: number) => string;
-        secondPass: (crf: number, bitrate: number) => string;
-    };
-};
-
 const bitRateModes = {
+    // Variable Bitrate Mode / Constant Quality Mode
     VBR: {
         firstPass: (crf: number) => `-crf ${crf}`,
         secondPass: (crf: number) => `-crf ${crf}`,
     },
+    // Constant Bitrate Mode
     CBR: {
         firstPass: (bitrate: number, maxBitrate: number) => `-b:v ${bitrate}k -maxrate ${maxBitrate}k`,
         secondPass: (bitrate: number, maxBitrate: number) => `-b:v ${bitrate}k -maxrate ${maxBitrate}k -bufsize 6000k`,
     },
+    // Constrained Quality Mode
     CQ: {
         firstPass: (crf: number, bitrate: number) => `-crf ${crf} -b:v ${bitrate}k`,
         secondPass: (crf: number, bitrate: number) => `-crf ${crf} -b:v ${bitrate}k`,
     },
-} satisfies BitrateModes;
+};
+
+type BitrateModes = typeof bitRateModes;
 
 function getBitrateModePass<T extends keyof BitrateModes>(mode: T): BitrateModes[T] {
     return bitRateModes[mode];

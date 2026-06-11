@@ -70,7 +70,7 @@ function getAudioResampling(audioStream: AudioStream): string {
         : "";
 }
 
-async function promptAudioFilters() {
+async function promptAudioFilters(): Promise<string> {
     const appliedFilters: Record<string, string> = {};
 
     const selectedFilters = await checkbox({

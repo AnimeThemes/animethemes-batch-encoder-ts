@@ -97,8 +97,8 @@ if ($Parts -notcontains $InstallDir) {
     await runPowerShell(script);
 }
 
-export async function ensureInstalled(): Promise<boolean> {
-    if (!IS_WINDOWS) return false;
+export async function ensureInstalled(): Promise<void> {
+    if (!IS_WINDOWS) return;
 
     await mkdir(INSTALL_DIR, { recursive: true });
 
@@ -106,17 +106,12 @@ export async function ensureInstalled(): Promise<boolean> {
 
     if (!samePath(currentExe, INSTALL_EXE)) {
         await copyFile(currentExe, INSTALL_EXE);
-        await addInstallDirToPath();
 
         console.log(`Installed at: ${INSTALL_EXE}`);
         console.log(`Open a new terminal and run: ${APP_NAME} --help`);
-
-        return true;
     }
 
     await addInstallDirToPath();
-
-    return false;
 }
 
 async function getLatestRelease(): Promise<GitHubRelease | null> {
