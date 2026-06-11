@@ -12,7 +12,7 @@ Ideally we are iterating over a combination of filters and settings, picking the
 
 ### Requirements
 
-- FFmpeg 7.x
+- FFmpeg +7.x (ffmpeg-release-full.7z from release builds)
 
 ### Install
 
