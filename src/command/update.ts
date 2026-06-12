@@ -1,9 +1,9 @@
 import { spawn } from "node:child_process";
-import { copyFile, mkdir } from "node:fs/promises";
 import { homedir, tmpdir } from "node:os";
 import { join, normalize } from "node:path";
 
-import packageJson from "../package.json";
+import packageJson from "../../package.json";
+import { escapePowerShellString } from "./install";
 
 function getPackageString(value: unknown, fallback: string) {
     return typeof value === "string" && value.trim() ? value.trim() : fallback;
@@ -11,19 +11,19 @@ function getPackageString(value: unknown, fallback: string) {
 
 export const VERSION = getPackageString(packageJson.version, "0.0.0");
 
-const APP_NAME = getPackageString(packageJson.name, "batch-encoder");
+export const APP_NAME = getPackageString(packageJson.name, "batch-encoder");
 const OWNER = getPackageString(packageJson.author, "");
 const REPO = getPackageString((packageJson as { repo?: unknown }).repo, "");
 
 const IS_WINDOWS = process.platform === "win32";
 
-const INSTALL_DIR = join(
+export const INSTALL_DIR = join(
     process.env.LOCALAPPDATA ?? join(homedir(), "AppData", "Local"),
     "Programs",
     APP_NAME,
 );
 
-const INSTALL_EXE = join(INSTALL_DIR, `${APP_NAME}.exe`);
+export const INSTALL_EXE = join(INSTALL_DIR, `${APP_NAME}.exe`);
 
 type GitHubRelease = {
     tag_name: string;
@@ -33,7 +33,7 @@ type GitHubRelease = {
     }>;
 };
 
-function samePath(a: string, b: string) {
+export function samePath(a: string, b: string) {
     return normalize(a).toLowerCase() === normalize(b).toLowerCase();
 }
 
@@ -43,75 +43,6 @@ function cleanVersion(version: string) {
 
 function sameVersion(a: string, b: string) {
     return cleanVersion(a) === cleanVersion(b);
-}
-
-function escapePowerShellString(value: string) {
-    return value.replace(/'/g, "''");
-}
-
-function runPowerShell(script: string) {
-    return new Promise<void>((resolve, reject) => {
-        const child = spawn(
-            "powershell.exe",
-            ["-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", script],
-            { windowsHide: true },
-        );
-
-        let stderr = "";
-
-        child.stderr.on("data", data => {
-            stderr += String(data);
-        });
-
-        child.on("close", code => {
-            if (code === 0) {
-                resolve();
-                return;
-            }
-
-            reject(new Error(stderr || `PowerShell exited with code ${code}`));
-        });
-    });
-}
-
-async function addInstallDirToPath() {
-    const safeInstallDir = escapePowerShellString(INSTALL_DIR);
-
-    const script = `
-$InstallDir = '${safeInstallDir}'
-$UserPath = [Environment]::GetEnvironmentVariable('Path', 'User')
-
-if ([string]::IsNullOrWhiteSpace($UserPath)) {
-    [Environment]::SetEnvironmentVariable('Path', $InstallDir, 'User')
-    exit 0
-}
-
-$Parts = $UserPath -split ';' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
-
-if ($Parts -notcontains $InstallDir) {
-    $NewPath = ($Parts + $InstallDir) -join ';'
-    [Environment]::SetEnvironmentVariable('Path', $NewPath, 'User')
-}
-`;
-
-    await runPowerShell(script);
-}
-
-export async function ensureInstalled(): Promise<void> {
-    if (!IS_WINDOWS) return;
-
-    await mkdir(INSTALL_DIR, { recursive: true });
-
-    const currentExe = process.execPath;
-
-    if (!samePath(currentExe, INSTALL_EXE)) {
-        await copyFile(currentExe, INSTALL_EXE);
-
-        console.log(`Installed at: ${INSTALL_EXE}`);
-        console.log(`Open a new terminal and run: ${APP_NAME} --help`);
-    }
-
-    await addInstallDirToPath();
 }
 
 async function getLatestRelease(): Promise<GitHubRelease | null> {

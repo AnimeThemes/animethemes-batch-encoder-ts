@@ -4,7 +4,8 @@ import * as v from "valibot";
 
 import { execute } from "@/command/execute";
 import { generate } from "@/command/generate.ts";
-import { ensureInstalled, update, VERSION } from "@/system";
+import { install } from "@/command/install";
+import { update, VERSION } from "@/command/update";
 
 const program = new Command();
 
@@ -33,7 +34,7 @@ program
 program
     .command("install")
     .description("Install the script globally")
-    .action(async () => await ensureInstalled());
+    .action(async () => await install());
 
 program
     .command("update")
@@ -80,7 +81,7 @@ async function selectMode() {
                 name: "Install Batch Encoder",
                 description: "Install the script on the home directory and add batch-encoder as a Windows PATH.",
                 value: async () => {
-                    await ensureInstalled();
+                    await install();
                 },
             },
             {
