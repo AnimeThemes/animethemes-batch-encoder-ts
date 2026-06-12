@@ -69,18 +69,13 @@ function getOutputPath(command: string): string|undefined {
 
 function getOutputName(command: string): string {
     const args = parseCommand(command);
-    const finalArg = args.at(-1)!;
+    const finalArg = args.at(-1);
+
+    if (!finalArg) {
+        return "unknown";
+    }
 
     if (finalArg.toUpperCase() === "NUL") {
-        const index = args.indexOf("-passlogfile");
-        const passlogfile = index !== -1 ? args[index + 1] : undefined;
-
-        if (passlogfile) {
-            return passlogfile.toLowerCase().endsWith(".webm")
-                ? passlogfile
-                : `${passlogfile}.webm`;
-        }
-
         return "NUL";
     }
 
@@ -905,33 +900,23 @@ async function createEncodeJobsFromFile(file: string): Promise<EncodeJob[]> {
 
     const jobs: EncodeJob[] = [];
 
-    let currentJob: EncodeJob | undefined;
+    for (let index = 0; index < commands.length; index += 2) {
+        const jobCommands = commands.slice(index, index + 2);
 
-    commands.forEach((command, index) => {
-        const output = getOutputName(command);
-        const outputPath = getOutputPath(command);
+        const outputCommand = jobCommands[1] ?? jobCommands[0]!;
 
-        if (currentJob && currentJob.output === output) {
-            currentJob.commands.push(command);
+        const output = getOutputName(outputCommand);
+        const outputPath = getOutputPath(outputCommand);
 
-            if (outputPath) {
-                currentJob.outputPath = outputPath;
-            }
-
-            return;
-        }
-
-        currentJob = {
+        jobs.push({
             id: `${file}:${index}:${output}`,
             sourceFile: file,
             output,
             outputPath,
-            commands: [command],
+            commands: jobCommands,
             status: "queued",
-        };
-
-        jobs.push(currentJob);
-    });
+        });
+    }
 
     console.log(chalk.white(`Reading ${commands.length} commands from '${file}' into ${jobs.length} encode jobs...`));
 
@@ -1022,7 +1007,7 @@ export async function execute(): Promise<void> {
     setupKeyboardShortcuts();
 
     try {
-        for (const job of jobs) {
+        for (const job of selectedInitialJobs) {
             queueJob(job);
         }
 
