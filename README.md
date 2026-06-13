@@ -49,7 +49,7 @@ The configuration file in which our encoding properties are defined.
 
 By default, the program will write to or read from `config.json` in the current directory or in the user config directory of appname batch-encoder.
 
-Example: C:\Users\AnimeThemes\\.config\batch-encoder\config.json
+Example: `C:\Users\AnimeThemes\.config\batch-encoder\config.json`
 
 `allowedFileTypes` is an array listing of file extensions that will be considered for source file candidates.
 

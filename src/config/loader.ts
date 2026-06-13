@@ -1,23 +1,24 @@
 import type { BunFile } from "bun";
+import { mkdir } from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
 import * as v from "valibot";
 
 import { type Config, getDefaultConfig, parseConfig } from "./schema.ts";
 
-async function loadConfig(workDir: string, configfile: string): Promise<Config> {
+async function loadConfig(workDir: string, configFilename: string): Promise<Config> {
     const [localConfig, globalConfig] = await Promise.all([
-        getLocalConfigFile(workDir, configfile).then((file) => file && loadConfigFromFile(file)),
-        getGlobalConfigFile(configfile).then((file) => file && loadConfigFromFile(file)),
+        getLocalConfigFile(workDir, configFilename).then((file) => file && loadConfigFromFile(file)),
+        getGlobalConfigFile(configFilename).then((file) => file && loadConfigFromFile(file)),
     ]);
 
-    const configs = [globalConfig, localConfig].filter((config) => config !== null);
+    const config = [localConfig, globalConfig].find((config) => config !== null);
 
-    return mergeConfigs([getDefaultConfig(), ...configs]);
+    return config!;
 }
 
-async function getLocalConfigFile(workDir: string, configfile: string): Promise<BunFile | null> {
-    const configPath = path.join(workDir, configfile);
+async function getLocalConfigFile(workDir: string, configFilename: string): Promise<BunFile | null> {
+    const configPath = path.join(workDir, configFilename);
     const configFile = Bun.file(configPath);
 
     if (await configFile.exists()) {
@@ -27,27 +28,24 @@ async function getLocalConfigFile(workDir: string, configfile: string): Promise<
     return null;
 }
 
-async function getGlobalConfigFile(configfile: string): Promise<BunFile | null> {
-    const homeDir = os.homedir();
-    const configFile = Bun.file(`${homeDir}/.config/batch-encoder/${configfile}`);
+async function getGlobalConfigFile(configFilename: string): Promise<BunFile> {
+    const configDir = `${os.homedir()}/.config/batch-encoder`;
+    const defaultConfigFile = Bun.file(`${configDir}/config.json`);
 
-    if (await configFile.exists()) {
-        return configFile;
+    // Create default config file on first use.
+    if (!(await defaultConfigFile.exists())) {
+        await mkdir(configDir, { recursive: true });
+        await Bun.write(defaultConfigFile, JSON.stringify(getDefaultConfig(), null, 4));
     }
 
-    return null;
+    const configFile = Bun.file(`${configDir}/${configFilename}`);
+
+    return await configFile.exists()
+        ? configFile
+        : defaultConfigFile;
 }
 
-function mergeConfigs(configs: [Config, ...Array<Config>]): Config {
-    return configs.reduce((mergedConfig, nextConfig) => {
-        return {
-            ...mergedConfig,
-            ...nextConfig,
-        };
-    });
-}
-
-async function loadConfigFromFile(file: BunFile): Promise<Config | null> {
+async function loadConfigFromFile(file: BunFile): Promise<Config> {
     try {
         const configJson = await file.json();
 
@@ -58,10 +56,9 @@ async function loadConfigFromFile(file: BunFile): Promise<Config | null> {
             console.error(v.summarize(error.issues));
         } else {
             console.error(`Could not load config file: ${file.name}`);
-            console.error(error);
         }
 
-        return null;
+        throw error;
     }
 }
 
