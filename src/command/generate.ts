@@ -12,10 +12,12 @@ import { getFirstPassString, getSecondPassString } from "@/ffmpeg/pass";
 import { output, seek } from "@/ffmpeg/seek";
 import { promptVideoFilters } from "@/ffmpeg/videoFilter";
 import { analyze, getAudioStream, getVideoStream } from "@/ffprobe/analyze";
+import { getOutputName } from "./execute";
 
 type GenerateArgs = {
     file: string;
     configFile: string;
+    split: boolean;
 }
 
 async function generate(args: GenerateArgs) {
@@ -124,10 +126,17 @@ async function generate(args: GenerateArgs) {
                 }
             }
         }
-
     }
 
-    await writeFile(args.file, ffmpegCommands.join('\n'));
+    if (args.split) {
+        for (let index = 0; index < ffmpegCommands.length; index += 2) {
+            const jobCommands = ffmpegCommands.slice(index, index + 2);
+
+            await writeFile(getOutputName(jobCommands[1]!).replace(".webm", ".txt"), jobCommands.join('\n'));
+        }
+    } else {
+        await writeFile(args.file, ffmpegCommands.join('\n'));
+    }
 }
 
 export { generate };

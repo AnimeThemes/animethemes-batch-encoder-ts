@@ -18,7 +18,8 @@ program
 
 program
     .option("--config-file <file>", "Name of config file", "config.json")
-    .option("-f, --file <file>", "Name of file commands are written to", "commands.txt");
+    .option("-f, --file <file>", "Name of file commands are written to", "commands.txt")
+    .option("--split", "If you want to split each output on its own file", false);
 
 program
     .command("generate")

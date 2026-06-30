@@ -4,6 +4,7 @@ import { join, normalize } from "node:path";
 
 import packageJson from "../../package.json";
 import { escapePowerShellString } from "./install";
+import { semver } from "bun";
 
 function getPackageString(value: unknown, fallback: string) {
     return typeof value === "string" && value.trim() ? value.trim() : fallback;
@@ -37,29 +38,18 @@ export function samePath(a: string, b: string) {
     return normalize(a).toLowerCase() === normalize(b).toLowerCase();
 }
 
-function cleanVersion(version: string) {
-    return version.replace(/^v/i, "").trim();
-}
-
-function sameVersion(a: string, b: string) {
-    return cleanVersion(a) === cleanVersion(b);
-}
-
 async function getLatestRelease(): Promise<GitHubRelease | null> {
     if (!OWNER || !REPO) {
         console.log("GitHub owner or repository is missing in package.json.");
         return null;
     }
 
-    const response = await fetch(
-        `https://api.github.com/repos/${OWNER}/${REPO}/releases/latest`,
-        {
-            headers: {
-                Accept: "application/vnd.github+json",
-                "User-Agent": APP_NAME,
-            },
+    const response = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/releases/latest`, {
+        headers: {
+            Accept: "application/vnd.github+json",
+            "User-Agent": APP_NAME,
         },
-    );
+    });
 
     if (!response.ok) {
         console.log(`Update check failed: ${response.status} ${response.statusText}`);
@@ -188,7 +178,7 @@ export async function update() {
         return;
     }
 
-    if (sameVersion(release.tag_name, VERSION)) {
+    if (semver.order(release.tag_name.replace("v", ""), VERSION) === 0) {
         console.log("No update available.");
         return;
     }
@@ -204,7 +194,7 @@ export async function update() {
 
     const tempExe = join(
         tmpdir(),
-        `${APP_NAME}-${cleanVersion(release.tag_name)}.exe`,
+        `${APP_NAME}-${release.tag_name}.exe`,
     );
 
     await downloadFile(asset.browser_download_url, tempExe);

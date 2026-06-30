@@ -23,7 +23,7 @@ Ideally we are iterating over a combination of filters and settings, picking the
 ### Usage
 
 ```
-batch-encoder [generate | g] [execute | e] [validate] [install] [update] [--file [FILE]] [--config-file [FILE]]
+batch-encoder [generate | g] [execute | e] [validate] [install] [update] [--split] [--file [FILE]] [--config-file [FILE]]
 ```
 
 #### Mode
@@ -41,6 +41,10 @@ The user will be prompted for values that are not determined programmatically, s
 `install` will put the script in your home directory and add `batch-encoder` to your Windows PATH.
 
 `update` will search for the latest release in the GitHub repository and update the script. Restarting the CMD is required.
+
+#### Split
+
+The `--split` argument works with the `generate` mode where it splits every WebM output on its own `.txt` file.
 
 #### File 
 
