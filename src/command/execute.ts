@@ -69,7 +69,7 @@ function getOutputPath(command: string): string|undefined {
     return finalArg;
 }
 
-function getOutputName(command: string): string {
+export function getOutputName(command: string): string {
     const args = parseCommand(command);
     const finalArg = args.at(-1);
 

@@ -2,6 +2,7 @@ import { checkbox } from "@inquirer/prompts";
 import chalk from "chalk";
 import fs, { writeFile } from "node:fs/promises";
 
+import { getOutputName } from "@/command/execute";
 import { loadEnvironment } from "@/env";
 import { getAudioFiltersString, promptAudioFilters } from "@/ffmpeg/audioFilter";
 import { getCbrBitrate, getCbrMaxBitrate } from "@/ffmpeg/bitrateMode";
@@ -16,6 +17,7 @@ import { analyze, getAudioStream, getVideoStream } from "@/ffprobe/analyze";
 type GenerateArgs = {
     file: string;
     configFile: string;
+    split: boolean;
 }
 
 async function generate(args: GenerateArgs) {
@@ -124,10 +126,17 @@ async function generate(args: GenerateArgs) {
                 }
             }
         }
-
     }
 
-    await writeFile(args.file, ffmpegCommands.join('\n'));
+    if (args.split) {
+        for (let index = 0; index < ffmpegCommands.length; index += 2) {
+            const jobCommands = ffmpegCommands.slice(index, index + 2);
+
+            await writeFile(getOutputName(jobCommands[1]!).replace(".webm", ".txt"), jobCommands.join('\n'));
+        }
+    } else {
+        await writeFile(args.file, ffmpegCommands.join('\n'));
+    }
 }
 
 export { generate };
