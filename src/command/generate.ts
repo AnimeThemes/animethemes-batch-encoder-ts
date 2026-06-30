@@ -2,6 +2,7 @@ import { checkbox } from "@inquirer/prompts";
 import chalk from "chalk";
 import fs, { writeFile } from "node:fs/promises";
 
+import { getOutputName } from "@/command/execute";
 import { loadEnvironment } from "@/env";
 import { getAudioFiltersString, promptAudioFilters } from "@/ffmpeg/audioFilter";
 import { getCbrBitrate, getCbrMaxBitrate } from "@/ffmpeg/bitrateMode";
@@ -12,7 +13,6 @@ import { getFirstPassString, getSecondPassString } from "@/ffmpeg/pass";
 import { output, seek } from "@/ffmpeg/seek";
 import { promptVideoFilters } from "@/ffmpeg/videoFilter";
 import { analyze, getAudioStream, getVideoStream } from "@/ffprobe/analyze";
-import { getOutputName } from "./execute";
 
 type GenerateArgs = {
     file: string;

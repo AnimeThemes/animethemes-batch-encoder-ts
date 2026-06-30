@@ -1,10 +1,10 @@
+import { semver } from "bun";
 import { spawn } from "node:child_process";
 import { homedir, tmpdir } from "node:os";
 import { join, normalize } from "node:path";
 
 import packageJson from "../../package.json";
 import { escapePowerShellString } from "./install";
-import { semver } from "bun";
 
 function getPackageString(value: unknown, fallback: string) {
     return typeof value === "string" && value.trim() ? value.trim() : fallback;
