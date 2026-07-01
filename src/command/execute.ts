@@ -6,6 +6,10 @@ import * as readline from "node:readline";
 
 import { checkEncodingTools } from "@/env";
 
+type ExecuteArgs = {
+    recursive: boolean;
+};
+
 type ProgressStatus = 
     | "available"
     | "queued"
@@ -953,14 +957,14 @@ function printSummary(jobs: EncodeJob[]): void {
     }
 }
 
-export async function execute(): Promise<void> {
+export async function execute(args: ExecuteArgs): Promise<void> {
     await checkEncodingTools();
 
     const workDir = process.cwd();
 
     const files = await checkbox({
         message: "Select command files to read",
-        choices: (await fs.readdir(workDir)).filter(file => file.endsWith(".txt")).map(file => ({
+        choices: (await fs.readdir(workDir, { recursive: args.recursive })).filter(file => !file.includes("node_modules") && file.endsWith(".txt")).map(file => ({
             name: file,
             value: file,
         })),

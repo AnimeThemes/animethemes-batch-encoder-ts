@@ -1,5 +1,5 @@
 import { select } from "@inquirer/prompts";
-import { Command } from "commander";
+import { Command, Option } from "commander";
 import * as v from "valibot";
 
 import { execute } from "@/command/execute";
@@ -17,9 +17,37 @@ program
     .action(withErrorHandling(selectMode));
 
 program
-    .option("--config-file <file>", "Name of config file", "config.json")
-    .option("-f, --file <file>", "Name of file commands are written to", "commands.txt")
-    .option("--split", "If you want to split each output on its own file", false);
+    .addOption(
+        new Option("--config-file <file>", "Name of config file")
+            .default("config.json")
+            .argParser((value: string) => {
+                if (!value.endsWith(".json")) {
+                    throw new Error("Config file must be a .json file");
+                }
+
+                return value;
+            })
+    )
+    .addOption(
+        new Option("-f, --file <file>", "Name of file commands are written to")
+            .default("commands.txt")
+            .argParser((value: string) => {
+                if (!value.endsWith(".txt")) {
+                    throw new Error("File must be a .txt file");
+                }
+
+                return value;
+            })
+    )
+    .addOption(
+        new Option("--split", "If you want to split each output on its own file")
+            .conflicts("file")
+            .default(false)
+    )
+    .addOption(
+        new Option("--recursive", "Iterate subdirectories to scan .txt files to run")
+            .default(false)
+    );
 
 program
     .command("generate")
@@ -31,7 +59,7 @@ program
     .command("execute")
     .alias("e")
     .description("Execute commands")
-    .action(() => withErrorHandling(() => execute())());
+    .action((args) => withErrorHandling(() => execute({ ...args, ...program.opts() }))());
 
 program
     .command("validate")
@@ -82,7 +110,9 @@ async function selectMode() {
             {
                 name: "Execute commands",
                 description: "Executes commands from file in the current directory in parallel.",
-                value: execute,
+                value: (args) => {
+                    execute({ ...args, ...program.opts() });
+                },
             },
             {
                 name: "Verify WebM(s) Against AnimeThemes Encoding Standards",
@@ -104,5 +134,5 @@ async function selectMode() {
         ],
     });
 
-    await runMode(program.opts());
+    runMode(program.opts());
 }
