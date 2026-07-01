@@ -1,3 +1,4 @@
+import type { Config } from "@/config/schema";
 import { type BitrateModes,getAudioBitrateArgs, getBitrateModePass } from "@/ffmpeg/bitrateMode";
 import { buildFilename } from "@/ffmpeg/filename";
 import { getFileSizeLimitArg } from "@/ffmpeg/fileSizeLimit";
@@ -16,7 +17,7 @@ function getFirstPassString(
     videoStreamArg: number,
     audioStreamArg: number,
     duration: number,
-    threads: number,
+    config: Config,
 ): string {
     const firstPass = (() => {
         switch (mode) {
@@ -38,7 +39,7 @@ function getFirstPassString(
 
     commands.push(`ffmpeg ${colorspaceArgs} ${seek} -pass 1 -passlogfile ${filename}`);
     commands.push(`-map 0:v:${videoStreamArg} -map 0:a:${audioStreamArg}`);
-    commands.push(`-c:v libvpx-vp9 ${firstPass} -cpu-used 4 ${getKeyframeIntervalArg(duration)} -threads ${threads}`);
+    commands.push(`-c:v libvpx-vp9 ${firstPass} -cpu-used 4 ${getKeyframeIntervalArg(duration)} -threads ${config.threads}`);
     commands.push(`-tile-columns 6 -frame-parallel 0 -auto-alt-ref 1 -lag-in-frames 25 -row-mt 1 -pix_fmt yuv420p -an -sn -f webm -y NUL`);
 
     return commands.filter(Boolean).join(" ");
@@ -55,10 +56,10 @@ async function getSecondPassString(
     videoStreamArg: number,
     audioStreamArg: number,
     duration: number,
-    threads: number,
     audioFilters: string,
     videoFilter: VideoFilter,
     meta: MediaAnalysis,
+    config: Config,
 ): Promise<string> {
     const secondPass = (() => {
         switch (mode) {
@@ -82,12 +83,16 @@ async function getSecondPassString(
 
     commands.push(`ffmpeg ${colorspaceArgs} ${seek} -pass 2 -passlogfile ${filename}`);
     commands.push(`-map 0:v:${videoStreamArg} -map 0:a:${audioStreamArg}`);
-    commands.push(`-c:v libvpx-vp9 ${secondPass} -cpu-used 0 ${getKeyframeIntervalArg(duration)} -threads ${threads}`);
+    commands.push(`-c:v libvpx-vp9 ${secondPass} -cpu-used 0 ${getKeyframeIntervalArg(duration)} -threads ${config.threads}`);
     commands.push(audioFilters);
     commands.push(`${await getVideoFilterString(videoFilter)} -tile-columns 6`);
     commands.push(`-frame-parallel 0 -auto-alt-ref 1 -lag-in-frames 25 -row-mt 1 -pix_fmt yuv420p`);
     commands.push(getAudioBitrateArgs(meta));
-    commands.push(await getFileSizeLimitArg(meta, duration, videoFilter));
+
+    if (config.limitSizeEnable) {
+        commands.push(await getFileSizeLimitArg(meta, duration, videoFilter));
+    }
+
     commands.push(`-map_metadata:g -1 -map_metadata:s:v -1 -map_metadata:s:a -1 -map_chapters -1 -sn -f webm -y ${finalFilename}.webm`)
 
     return commands.filter(Boolean).join(" ");
