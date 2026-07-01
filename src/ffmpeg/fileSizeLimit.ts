@@ -11,7 +11,7 @@ async function getFileSizeLimitArg(meta: MediaAnalysis, duration: number, videoF
         }
     }
 
-    const limit = ((resolution * 6100 + 475000) * duration) / 8;
+    const limit = ((resolution * 6500 + 475000) * duration) / 8;
 
     return `-fs ${Math.round(limit).toString()}`;
 }

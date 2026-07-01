@@ -1,15 +1,10 @@
-import { checkbox, confirm, input } from "@inquirer/prompts";
+import { checkbox, input } from "@inquirer/prompts";
 
 import type { Config } from "@/config/schema";
 import { bitRateModes } from "@/ffmpeg/bitrateMode";
 
 async function promptCustomQuestions(config: Config): Promise<Config> {
     const newConfig = {...config};
-
-    newConfig.limitSizeEnable = await confirm({
-        message: "Limit Size Enable?",
-        default: config.limitSizeEnable,
-    });
 
     newConfig.encodingModes = await checkbox({
         message: "Select Encoding Modes",
