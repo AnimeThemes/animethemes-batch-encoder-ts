@@ -23,7 +23,7 @@ Ideally we are iterating over a combination of filters and settings, picking the
 ### Usage
 
 ```
-batch-encoder [generate | g] [execute | e] [validate] [install] [update] [--split] [--file [FILE]] [--config-file [FILE]]
+batch-encoder [generate | g] [execute | e] [validate] [install] [update] [--split] [--recursive] [--file [FILE]] [--config-file [FILE]]
 ```
 
 #### Mode
@@ -44,7 +44,15 @@ The user will be prompted for values that are not determined programmatically, s
 
 #### Split
 
-The `--split` argument works with the `generate` mode where it splits every WebM output on its own `.txt` file.
+The `--split` argument splits every WebM output on its own `.txt` file.
+
+Notes: Generate mode only. Mutually exclusive with `--file`.
+
+#### Recursive
+
+The `--recursive` argument iterate through subdirectories to look for `.txt` files.
+
+Note: Execute mode only.
 
 #### File 
 
@@ -52,13 +60,19 @@ The file that commands are written to or read from.
 
 By default, the program will write to or read from `commands.txt` in the current directory.
 
+Notes: Generate mode only.
+
 #### Config File
 
 The configuration file in which our encoding properties are defined.
 
 By default, the program will write to or read from `config.json` in the current directory or in the user config directory of appname batch-encoder.
 
-Example: `C:\Users\AnimeThemes\.config\batch-encoder\config.json`
+There is a template in `config.json` in the root.
+
+Example: `C:\Users\AnimeThemes\.config\batch-encoder\config.json`.
+
+Note: Generate mode only.
 
 `allowedFileTypes` is an array listing of file extensions that will be considered for source file candidates.
 
@@ -105,7 +119,7 @@ Available bitrate control modes are:
 ### Requirements
 
 - Bun v1.2.18 or newer
-- FFmpeg 7.x
+- FFmpeg ^7.x
 
 Install dependencies:
 
