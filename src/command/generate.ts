@@ -94,8 +94,8 @@ async function generate(args: GenerateArgs) {
                     for (const crf of customConfig.crfs) {
                         for (const videoFilter of videoFilters) {
                             ffmpegCommands.push(
-                                getFirstPassString(colorspace, seekArgs, mode, crf, null, null, outputFile, videoStreamIndex, audioStreamIndex, duration, customConfig.threads),
-                                await getSecondPassString(colorspace, seekArgs, mode, crf, null, null, outputFile, videoStreamIndex, audioStreamIndex, duration, customConfig.threads, audioFilters, videoFilter, sourceMeta),
+                                getFirstPassString(colorspace, seekArgs, mode, crf, null, null, outputFile, videoStreamIndex, audioStreamIndex, duration, customConfig),
+                                await getSecondPassString(colorspace, seekArgs, mode, crf, null, null, outputFile, videoStreamIndex, audioStreamIndex, duration, audioFilters, videoFilter, sourceMeta, customConfig),
                             );
                         }
                     }
@@ -106,8 +106,8 @@ async function generate(args: GenerateArgs) {
                         for (const cbrMaxBitrate of maxBitrate) {
                             for (const videoFilter of videoFilters) {
                                 ffmpegCommands.push(
-                                    getFirstPassString(colorspace, seekArgs, mode, null, cbrBitrate, cbrMaxBitrate, outputFile, videoStreamIndex, audioStreamIndex, duration, customConfig.threads),
-                                    await getSecondPassString(colorspace, seekArgs, mode, null, cbrBitrate, cbrMaxBitrate, outputFile, videoStreamIndex, audioStreamIndex, duration, customConfig.threads, audioFilters, videoFilter, sourceMeta),
+                                    getFirstPassString(colorspace, seekArgs, mode, null, cbrBitrate, cbrMaxBitrate, outputFile, videoStreamIndex, audioStreamIndex, duration, customConfig),
+                                    await getSecondPassString(colorspace, seekArgs, mode, null, cbrBitrate, cbrMaxBitrate, outputFile, videoStreamIndex, audioStreamIndex, duration, audioFilters, videoFilter, sourceMeta, customConfig),
                                 );
                             }
                         }
@@ -118,8 +118,8 @@ async function generate(args: GenerateArgs) {
                     for (const crf of customConfig.crfs) {
                         for (const videoFilter of videoFilters) {
                             ffmpegCommands.push(
-                                getFirstPassString(colorspace, seekArgs, mode, crf, bitrate[0]!, null, outputFile, videoStreamIndex, audioStreamIndex, duration, customConfig.threads),
-                                await getSecondPassString(colorspace, seekArgs, mode, crf, bitrate[0]!, null, outputFile, videoStreamIndex, audioStreamIndex, duration, customConfig.threads, audioFilters, videoFilter, sourceMeta),
+                                getFirstPassString(colorspace, seekArgs, mode, crf, bitrate[0]!, null, outputFile, videoStreamIndex, audioStreamIndex, duration, customConfig),
+                                await getSecondPassString(colorspace, seekArgs, mode, crf, bitrate[0]!, null, outputFile, videoStreamIndex, audioStreamIndex, duration, audioFilters, videoFilter, sourceMeta, customConfig),
                             );
                         }
                     }
