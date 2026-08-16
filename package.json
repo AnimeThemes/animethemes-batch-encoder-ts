@@ -31,6 +31,7 @@
     "globals": "^17.6.0",
     "jiti": "^2.7.0",
     "prettier": "^3.6.2",
+    "react-devtools-core": "^7.0.1",
     "typescript-eslint": "^8.60.1"
   },
   "peerDependencies": {
