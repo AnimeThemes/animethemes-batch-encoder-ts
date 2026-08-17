@@ -2,10 +2,10 @@ import { checkbox } from "@inquirer/prompts";
 import chalk from "chalk";
 import fs from "node:fs/promises";
 
-import { checkEncodingTools } from "@/env";
-import { validateAudioFormat, validateAudioLoudness } from "@/validation/audio";
-import { validateMedia } from "@/validation/media";
-import { getAudioFormat, getLoudnessStats, getWebmFormat } from "@/validation/specs";
+import { checkEncodingTools } from "@/core/env";
+import { validateAudioFormat, validateAudioLoudness } from "@/core/validation/audio";
+import { validateMedia } from "@/core/validation/media";
+import { getAudioFormat, getLoudnessStats, getWebmFormat } from "@/core/validation/specs";
 
 async function validate(): Promise<void> {
     await checkEncodingTools();

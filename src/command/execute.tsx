@@ -3,7 +3,7 @@ import {Box, Text, render, useApp} from "ink";
 import {promises as fs} from "node:fs";
 import {basename} from "node:path";
 
-import {checkEncodingTools} from "@/env";
+import {checkEncodingTools} from "@/core/env";
 
 type ExecuteArgs = {
     recursive: boolean;

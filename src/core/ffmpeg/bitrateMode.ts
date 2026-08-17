@@ -1,4 +1,4 @@
-import type { MediaAnalysis, VideoStream } from "@/ffprobe/schema";
+import type { MediaAnalysis, VideoStream } from "@/core/ffprobe/schema";
 
 // Bitrate Mode determines the rate control argument values for our commands
 // Further Reading: https://developers.google.com/media/vp9/bitrate-modes

@@ -1,10 +1,10 @@
-import type { Config } from "@/config/schema";
-import { type BitrateModes,getAudioBitrateArgs, getBitrateModePass } from "@/ffmpeg/bitrateMode";
-import { buildFilename } from "@/ffmpeg/filename";
-import { getFileSizeLimitArg } from "@/ffmpeg/fileSizeLimit";
-import { getKeyframeIntervalArg } from "@/ffmpeg/keyframe";
-import type { VideoFilter } from "@/ffmpeg/videoFilter";
-import type { MediaAnalysis } from "@/ffprobe/schema";
+import type { Config } from "@/core/config/schema";
+import { type BitrateModes,getAudioBitrateArgs, getBitrateModePass } from "@/core/ffmpeg/bitrateMode";
+import { buildFilename } from "@/core/ffmpeg/filename";
+import { getFileSizeLimitArg } from "@/core/ffmpeg/fileSizeLimit";
+import { getKeyframeIntervalArg } from "@/core/ffmpeg/keyframe";
+import type { VideoFilter } from "@/core/ffmpeg/videoFilter";
+import type { MediaAnalysis } from "@/core/ffprobe/schema";
 
 function getFirstPassString(
     colorspaceArgs: string,
@@ -85,7 +85,7 @@ async function getSecondPassString(
     commands.push(`-map 0:v:${videoStreamArg} -map 0:a:${audioStreamArg}`);
     commands.push(`-c:v libvpx-vp9 ${secondPass} -cpu-used 0 ${getKeyframeIntervalArg(duration)} -threads ${config.threads}`);
     commands.push(audioFilters);
-    commands.push(`${await getVideoFilterString(videoFilter)} -tile-columns 6`);
+    commands.push(`${getVideoFilterString(videoFilter)} -tile-columns 6`);
     commands.push(`-frame-parallel 0 -auto-alt-ref 1 -lag-in-frames 25 -row-mt 1 -pix_fmt yuv420p`);
     commands.push(getAudioBitrateArgs(meta));
 
@@ -98,11 +98,9 @@ async function getSecondPassString(
     return commands.filter(Boolean).join(" ");
 }
 
-async function getVideoFilterString(videoFilter: VideoFilter): Promise<string> {
-    const string = await videoFilter.toString();
-
-    return string
-        ? `-vf ${string}`
+function getVideoFilterString(videoFilter: VideoFilter): string {
+    return videoFilter.filter
+        ? `-vf ${videoFilter.filter}`
         : "";
 }
 

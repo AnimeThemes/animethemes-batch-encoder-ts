@@ -1,5 +1,3 @@
-import { input } from "@inquirer/prompts";
-
 const timeCodeFormat = /(?:(\d{1,2}):)?(\d{1,2}):(\d{1,2}(?:\.\d+)?)/;
 const valueFormat = /(\d+(?:\.\d+)?)(s|ms|us)?/;
 
@@ -39,21 +37,4 @@ function isValidDuration(duration: string): boolean {
         .every(value => value.match(timeCodeFormat) !== null || value.match(valueFormat) !== null)
 }
 
-function promptDuration(message: string, previous: string|null = null): Promise<string> {
-    return input({
-        message,
-        validate: (value) => {
-            if (! isValidDuration(value)) {
-                return "Please enter a valid duration. See FFmpeg documentation for accepted formats: https://ffmpeg.org/ffmpeg-utils.html#time-duration-syntax";
-            }
-
-            if (previous && value.split(',').length !== previous.split(',').length) {
-                return "Please enter the same amount of text splitted by a comma";
-            }
-
-            return true;
-        }
-    });
-}
-
-export { parseDuration, promptDuration };
+export { parseDuration, isValidDuration };

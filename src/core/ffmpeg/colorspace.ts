@@ -1,4 +1,4 @@
-import type { MediaAnalysis } from "@/ffprobe/schema";
+import type { MediaAnalysis } from "@/core/ffprobe/schema";
 
 const colorspaces = {
     HD: {

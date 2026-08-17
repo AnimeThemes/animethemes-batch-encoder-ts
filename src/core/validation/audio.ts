@@ -1,6 +1,6 @@
 import * as v from "valibot";
 
-import type { AudioFormat, LoudnessStats } from "@/validation/specs";
+import type { AudioFormat, LoudnessStats } from "@/core/validation/specs";
 
 const ExpectedAudioFormatSchema = v.object({
     format: v.object({
