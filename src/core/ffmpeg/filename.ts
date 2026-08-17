@@ -1,5 +1,5 @@
-import type { BitrateModes } from "@/ffmpeg/bitrateMode";
-import type { VideoFilter } from "@/ffmpeg/videoFilter";
+import type { BitrateModes } from "@/core/ffmpeg/bitrateMode";
+import type { VideoFilter } from "@/core/ffmpeg/videoFilter";
 
 // Build unique WebM filename for encodes
 function buildFilename(

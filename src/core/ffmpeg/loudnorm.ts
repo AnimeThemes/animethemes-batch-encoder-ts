@@ -2,8 +2,8 @@ import { $ } from "bun";
 import { parseArgsStringToArgv } from "string-argv";
 import * as v from "valibot";
 
-import { getAudioResampling } from "@/ffmpeg/audioFilter";
-import { type AudioStream, type NormalizationInput, NormalizationInputSchema } from "@/ffprobe/schema";
+import { getAudioResampling } from "@/core/ffmpeg/audioFilter";
+import { type AudioStream, type NormalizationInput, NormalizationInputSchema } from "@/core/ffprobe/schema";
 
 const firstPassFilter = "loudnorm=I=-16:LRA=20:TP=-1:dual_mono=true:linear=true:print_format=json";
 
